@@ -8,14 +8,19 @@ class View
   {
     $this->content = '
     <div>
-      <a href="?start">СТАРТ</a>
+    <p>Загадайте двузначное число и нажмите на кнопку</p>
+      <a href="?guess">Загадал(а)</a>
     </div>
   ';
   }
 
-  public function getGuessScreen()
+  public function getGuessScreen(array $extr)
   {
-    $this->content = '
+    $a = null;
+    foreach ($extr as $item) {
+      $a .= $item . ' ';
+    }
+    $this->content = $a . '
     <div>
     догадки экстрасенсов
   </div>
@@ -34,7 +39,9 @@ class View
       результаты
     </div>
     <div>
-    <a href="?start">СТАРТ</a>
+    <p>Давайте попробуем ещё разок?
+    Загадайте двузначное число и нажмите на кнопку</p>
+    <a href="?start">Загадал(а)</a>
     </div>
   ';
   }

@@ -6,13 +6,19 @@ require_once 'class/extrasensory.php';
 require_once 'class/view.php';
 
 $view = new View();
+$extr = new Extrasensory(
+  'Влад Кадони',
+  'Ванга',
+  'Нострадамус'
+);
 
 if (!$_GET and !$_POST) {
   $view->getStartScreen();
 }
 
-if (isset($_GET['start'])) {
-  $view->getGuessScreen();
+if (isset($_GET['guess'])) {
+  $extr->setGuesses();
+  $view->getGuessScreen($extr->getGuesses());
 }
 
 if ($_POST['answer']) {
