@@ -4,7 +4,7 @@ class View
 {
   private $content;
 
-  public function getStartScreen()
+  public function startScreen()
   {
     $this->content = '
     <div>
@@ -14,12 +14,13 @@ class View
   ';
   }
 
-  public function getGuessScreen(array $extr)
+  public function guessScreen(array $extrasensory)
   {
+   
     $a = null;
-    foreach ($extr as $item) {
-      $a .= $item . ' ';
-    }
+    // foreach ($extr as $item) {
+    //   $a .= $item . ' ';
+    // }
     $this->content = $a . '
     <div>
     догадки экстрасенсов
@@ -32,7 +33,7 @@ class View
     ';
   }
 
-  public function getResultScreen()
+  public function resultScreen()
   {
     $this->content = '
     <div>
@@ -41,9 +42,14 @@ class View
     <div>
     <p>Давайте попробуем ещё разок?
     Загадайте двузначное число и нажмите на кнопку</p>
-    <a href="?start">Загадал(а)</a>
+    <a href="?guess">Загадал(а)</a>
     </div>
   ';
+  }
+
+  public function answerErr()
+  {
+    $this->content = 'ошибка ответа';
   }
 
   public function render()

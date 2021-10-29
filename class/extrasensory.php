@@ -2,32 +2,39 @@
 
 class Extrasensory
 {
-  private $info = [];
 
-  public function __construct(...$persons)
+  public function __construct(array $names)
   {
-    foreach ($persons as $k => $person) {
-      $this->info[$k]['name'] = $person;
-      $this->info[$k]['guesses'] = [];
-      $this->info[$k]['result'] = 0;
+    foreach ($names as $k => $name) {
+      $extrasensory[$k]['name'] = $name;
+      $extrasensory[$k]['guesses'] = [];
+      $extrasensory[$k]['result'] = 0;
     }
-     $_SESSION['info'] = $this->info;
+
+    Sess::setSession(['extrasensory' => $extrasensory]);
   }
 
-  public function setGuesses()
+  public function makeGuess(): void
   {
-    for ($i = 0; $i < count($this->info); $i++) {
-      $this->info[$i]['guesses'][] = rand(10, 99);
+    $extrasensory = Sess::getSession('extrasensory');
+
+    for ($i = 0; $i < count($extrasensory); $i++) {
+      array_push($extrasensory[$i]['guesses'], rand(10, 99));
     }
-    $_SESSION['info'] = $this->info;
+    Sess::updateSession(['extrasensory' => $extrasensory]);
   }
 
-  public function getGuesses()
+  public function result(int $answer): void
   {
-    print_r($_SESSION['info']);
-    exit;
-    // foreach($this->persons){
+    $extrasensory = Sess::getSession('extrasensory');
 
-    // }
+    for ($i = 0; $i < count($extrasensory); $i++) {
+      $last = end($extrasensory[$i]['guesses']);
+      if ($last == $answer)
+        $extrasensory[$i]['result']++;
+      else
+        $extrasensory[$i]['result']--;
+    }
+    Sess::updateSession(['extrasensory' => $extrasensory]);
   }
 }
