@@ -24,7 +24,7 @@ class Extrasensory
     Sess::updateSession(['extrasensory' => $extrasensory]);
   }
 
-  public function result(int $answer): void
+  public function setRating(int $answer): void
   {
     $extrasensory = Sess::getSession('extrasensory');
 

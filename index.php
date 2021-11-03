@@ -5,7 +5,6 @@ require_once 'classes/Number.php';
 require_once 'classes/Extrasensory.php';
 require_once 'classes/View.php';
 require_once 'classes/Sess.php';
-require_once 'classes/Validator.php';
 
 $extr = new Extrasensory(
   [
@@ -15,13 +14,13 @@ $extr = new Extrasensory(
   ]
 );
 $number = new Number();
-$view = new View(__DIR__ . 'views/');
+$view = new View(__DIR__ . '\\views\\');
 
 if (!$_GET and !$_POST) {
   $view->renderHtml('start.php');
 }
 
-if (isset($_GET['start'])) {
+if (isset($_GET['go'])) {
   $extr->makeGuess();
   header('Location: /?guess');
   exit;
@@ -32,14 +31,20 @@ if (isset($_GET['guess'])) {
 }
 
 if (isset($_POST['answer'])) {
-  $answer = Validator::checkNum($_POST['answer']);
+  $answer = $_POST['answer'];
 
-  if (!$answer) {
+  if (!($answer >= 10 and $answer <= 99)) {
     $_SESSION['error'] = 'Неверно указано значение';
-    $view->parserHtml('guess.php');
+    header('Location: /?guess');
+    exit;
   }
 
   $extr->setRating($answer);
   $number->addValue($answer);
-  $view->parserHtml('result.php');
+  header('Location: /?result');
+  exit;
+}
+
+if (isset($_GET['result'])) {
+  $view->renderHtml('result.php');
 }

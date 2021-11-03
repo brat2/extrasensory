@@ -2,70 +2,18 @@
 
 class View
 {
-  private $infoBlock;
-  private $formBlock;
-  private $historyBlock;
+  private $viewsPath;
 
-  public function startScreen()
+  public function __construct(string $path)
   {
-    $this->formBlock = '
-    <h3>Загадайте двузначное число и нажмите на кнопку</h3>
-    <button onclick="window.location.href = \'?guess\';">Готово</button>';
+    $this->viewsPath = $path;
   }
 
-  public function guessScreen()
+  public function renderHtml(string $fileName): void
   {
-
-    $this->infoBlock = $this->getData()['info'];
-
-    $this->formBlock = '
-    <div>
-    <form action="/" method="POST"><input type="text" name="answer">
-      <input type="submit" value="отправить">
-    </form>
-  </div>
-    ';
-    $this->historyBlock = $this->getData()['history'];
-  }
-
-  public function resultScreen()
-  {
-    $this->formBlock = ' 
-    <h2>Давайте попробуем ещё разок?</h2>
-    <h3>Загадайте двузначное число и нажмите на кнопку</h3>
-    <button onclick="window.location.href = \'?guess\';">Готово</button>';
-
-    $this->historyBlock = $this->getData()['history'];
-  }
-
-  public function answerErr()
-  {
-    $this->infoBlock = $this->getData()['info'];
-
-    $this->formBlock = '
-    <div>
-    <span style="color: red">Неверно указано число!</span>
-    <form action="/" method="POST"><input type="text" name="answer">
-      <input type="submit" value="отправить">
-    </form>
-  </div>
-    ';
-    $this->historyBlock = $this->getData()['history'];
-  }
-
-  public function infoBlock()
-  {
-    echo $this->infoBlock;
-  }
-
-  public function formBlock()
-  {
-    echo $this->formBlock;
-  }
-
-  public function historyBlock()
-  {
-    echo $this->historyBlock;
+    $this->viewsPath . $fileName;
+    include $this->viewsPath . $fileName;
+    exit;
   }
 
   private function getData(): array

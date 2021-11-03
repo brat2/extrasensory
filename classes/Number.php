@@ -7,7 +7,7 @@ class Number
     Sess::setSession(['numbers' => []]);
   }
 
-  public function setter($number)
+  public function addValue($number)
   {
     $numbers = Sess::getSession('numbers');
     array_push($numbers, $number);
