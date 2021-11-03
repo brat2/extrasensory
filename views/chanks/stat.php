@@ -1,4 +1,7 @@
 <?php
+
+use classes\Sess;
+
 $extrasensory = Sess::getSession('extrasensory');
 
 $numbers = Sess::getSession('numbers');

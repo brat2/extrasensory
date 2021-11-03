@@ -15,7 +15,8 @@
     li {
       padding-bottom: 10px;
     }
-    button{
+
+    button {
       padding: 8px;
       font-size: 18pt;
     }

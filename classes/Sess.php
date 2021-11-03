@@ -1,5 +1,7 @@
 <?php
 
+namespace classes;
+
 class Sess
 {
   public static function setSession(array $arr): void

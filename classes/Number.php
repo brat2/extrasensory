@@ -1,5 +1,7 @@
 <?php
 
+namespace classes;
+
 class Number
 {
   public function __construct()

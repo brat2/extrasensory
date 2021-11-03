@@ -5,7 +5,7 @@
 <button onclick="window.location.href = '?go';">Готово</button>
 
 <div>
-<?php include __DIR__ . '\\chanks\\stat.php'; ?>
+  <?php include __DIR__ . '\\chanks\\stat.php'; ?>
 </div>
 
 <?php include __DIR__ . '\\chanks\\footer.php'; ?>

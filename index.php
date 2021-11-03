@@ -1,10 +1,14 @@
 <?php
+
+use classes\View;
+use classes\Number;
+use classes\Extrasensory;
+
 session_start();
 
-require_once 'classes/Number.php';
-require_once 'classes/Extrasensory.php';
-require_once 'classes/View.php';
-require_once 'classes/Sess.php';
+spl_autoload_register(function (string $className) {
+  require_once __DIR__ . '\\' . $className . '.php';
+});
 
 $extr = new Extrasensory(
   [
