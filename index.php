@@ -1,43 +1,45 @@
-<?php require_once 'app.php'; ?>
+<?php
+session_start();
 
-<!DOCTYPE html>
-<html lang="ru">
+require_once 'classes/Number.php';
+require_once 'classes/Extrasensory.php';
+require_once 'classes/View.php';
+require_once 'classes/Sess.php';
+require_once 'classes/Validator.php';
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Тестовое задание</title>
-  <style>
-    p {
-      font-size: 18pt;
-      margin: 10px;
-    }
+$extr = new Extrasensory(
+  [
+    'Нострадамус',
+    'Ванга',
+    'Влад Кадони'
+  ]
+);
+$number = new Number();
+$view = new View(__DIR__ . 'views/');
 
-    li {
-      padding-bottom: 10px;
-    }
-    button{
-      padding: 8px;
-      font-size: 18pt;
-    }
-  </style>
-</head>
+if (!$_GET and !$_POST) {
+  $view->renderHtml('start.php');
+}
 
-<body>
+if (isset($_GET['start'])) {
+  $extr->makeGuess();
+  header('Location: /?guess');
+  exit;
+}
 
-  <div class="infoBlock">
-    <?php $view->infoBlock(); ?>
-  </div>
+if (isset($_GET['guess'])) {
+  $view->renderHtml('guess.php');
+}
 
-  <div class="formBlock">
-    <?php $view->formBlock(); ?>
-  </div>
+if (isset($_POST['answer'])) {
+  $answer = Validator::checkNum($_POST['answer']);
 
-  <div class="historyBlock">
-    <?php $view->historyBlock(); ?>
-  </div>
+  if (!$answer) {
+    $_SESSION['error'] = 'Неверно указано значение';
+    $view->parserHtml('guess.php');
+  }
 
-</body>
-
-</html>
+  $extr->setRating($answer);
+  $number->addValue($answer);
+  $view->parserHtml('result.php');
+}
