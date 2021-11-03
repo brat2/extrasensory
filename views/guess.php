@@ -28,4 +28,3 @@ $numbers = Sess::getSession('numbers');
 </div>
 
 <?php include __DIR__ . '\\chanks\\footer.php'; ?>
-use classes\Sess;
