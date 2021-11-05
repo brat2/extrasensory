@@ -1,21 +1,13 @@
-<?php
+<?php include __DIR__ . '\\chanks\\header.php'; ?>
 
-use classes\Sess;
-
-include __DIR__ . '\\chanks\\header.php'; ?>
-<?php
-
-$extrasensory = Sess::getSession('extrasensory');
-$numbers = Sess::getSession('numbers');
-?>
 <div>
   <h4 class="text-center">Догадки экстрасенсов</h4>
   <ul class="list-group">
-    <?php foreach ($extrasensory as $value) : ?>
+    <?php foreach ($extrasensList as $extrasens) : ?>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-        <?php echo $value['name'] ?>
+        <?php echo $extrasens->getName() ?>
         <span class="badge badge-primary badge-pill">
-          <?php echo end($value['guesses']) ?>
+          <?php echo $extrasens->getLastGuess() ?>
         </span>
       </li>
     <?php endforeach ?>

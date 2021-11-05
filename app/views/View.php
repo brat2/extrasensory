@@ -1,6 +1,6 @@
 <?php
 
-namespace classes;
+namespace app\views;
 
 class View
 {
@@ -11,9 +11,11 @@ class View
     $this->viewsPath = $path;
   }
 
-  public function renderHtml(string $fileName): void
+  public function renderHtml(string $fileName, array $data = []): void
   {
-    $this->viewsPath . $fileName;
+    foreach ($data as $key => $value) {
+      ${$key} = $value;
+    }
     include $this->viewsPath . $fileName;
     exit;
   }
