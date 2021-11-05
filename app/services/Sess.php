@@ -1,21 +1,17 @@
 <?php
 
-namespace classes;
+namespace app\services;
 
 class Sess
 {
-  public static function setSession(array $arr): void
+  public static function set(array $arr): void
   {
-    if (!isset($_SESSION[key($arr)])) $_SESSION[key($arr)] = $arr[key($arr)];
+    $s_data = serialize($arr[key($arr)]);
+    $_SESSION[key($arr)] = $s_data;
   }
 
-  public static function updateSession(array $arr): void
+  public static function get(string $key)
   {
-    $_SESSION[key($arr)] = $arr[key($arr)];
-  }
-
-  public static function getSession(string $name): array
-  {
-    return  $_SESSION[$name];
+    return unserialize($_SESSION[$key]);
   }
 }

@@ -1,42 +1,55 @@
 <?php
 
-namespace classes;
+namespace app\services;
+
+use app\services\Sess;
+use app\models\Extrasens;
 
 class Extrasensory
 {
+  private $extrasensList = [];
 
   public function __construct(array $names)
   {
-    foreach ($names as $k => $name) {
-      $extrasensory[$k]['name'] = $name;
-      $extrasensory[$k]['guesses'] = [];
-      $extrasensory[$k]['result'] = 0;
+    if (isset($_SESSION['extrasensList'])) {
+      $this->extrasensList = Sess::get('extrasensList');
+    } else {
+      $this->createExtrasens($names);
     }
+  }
 
-    Sess::setSession(['extrasensory' => $extrasensory]);
+  public function getExtrasensList(): array
+  {
+    return $this->extrasensList;
   }
 
   public function makeGuess(): void
   {
-    $extrasensory = Sess::getSession('extrasensory');
-
-    for ($i = 0; $i < count($extrasensory); $i++) {
-      array_push($extrasensory[$i]['guesses'], rand(10, 99));
+    foreach ($this->extrasensList as $extrasens) {
+      $guess = mt_rand(10, 99);
+      $extrasens->setGuess($guess);
     }
-    Sess::updateSession(['extrasensory' => $extrasensory]);
+
+    Sess::set(['extrasensList' => $this->extrasensList]);
   }
 
-  public function setRating(int $answer): void
+  public function setResult(int $answer): void
   {
-    $extrasensory = Sess::getSession('extrasensory');
-
-    for ($i = 0; $i < count($extrasensory); $i++) {
-      $last = end($extrasensory[$i]['guesses']);
-      if ($last == $answer)
-        $extrasensory[$i]['result']++;
+    foreach ($this->extrasensList as $extrasens) {
+      $lastGuess = $extrasens->getLastGuess();
+      if ($lastGuess == $answer)
+        $extrasens->setResult(1);
       else
-        $extrasensory[$i]['result']--;
+        $extrasens->setResult(-1);
     }
-    Sess::updateSession(['extrasensory' => $extrasensory]);
+
+    Sess::set(['extrasensList' => $this->extrasensList]);
+  }
+
+  private function createExtrasens(array $names): void
+  {
+    array_map(function ($name) {
+      $this->extrasensList[] = new Extrasens($name);
+    }, $names);
   }
 }
