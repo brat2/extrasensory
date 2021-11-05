@@ -1,18 +1,27 @@
 <?php
 
-namespace classes;
+namespace app\models;
 
-class Number
+use app\services\Sess;
+
+class User
 {
+  private $numberList = [];
+
   public function __construct()
   {
-    Sess::setSession(['numbers' => []]);
+    if (isset($_SESSION['numberList'])) {
+      $this->numberList = Sess::get('numberList');
+    }
+  }
+  public function getNumberList(): array
+  {
+    return $this->numberList;
   }
 
-  public function addValue($number)
+  public function addNumber($number)
   {
-    $numbers = Sess::getSession('numbers');
-    array_push($numbers, $number);
-    Sess::updateSession(['numbers' => $numbers]);
+    $this->numberList[] = $number;
+    Sess::set(['numberList' => $this->numberList]);
   }
 }
