@@ -1,8 +1,9 @@
 <?php
 
-use classes\View;
-use classes\Number;
-use classes\Extrasensory;
+use app\views\View;
+use app\models\User;
+use app\services\Extrasensory;
+use app\controllers\Controller;
 
 session_start();
 
@@ -10,45 +11,37 @@ spl_autoload_register(function (string $className) {
   require_once __DIR__ . '\\' . $className . '.php';
 });
 
-$extr = new Extrasensory(
+$extrasensory = new Extrasensory(
   [
     'Нострадамус',
     'Ванга',
     'Влад Кадони'
   ]
 );
-$number = new Number();
-$view = new View(__DIR__ . '\\views\\');
+$user = new User();
+$view = new View(__DIR__ . '\\templates\\');
+$controller = new Controller(
+  $extrasensory,
+  $user,
+  $view
+);
 
 if (!$_GET and !$_POST) {
-  $view->renderHtml('start.php');
+  $controller->start();
 }
 
 if (isset($_GET['go'])) {
-  $extr->makeGuess();
-  header('Location: /?guess');
-  exit;
+  $controller->makeGuess();
 }
 
 if (isset($_GET['guess'])) {
-  $view->renderHtml('guess.php');
+  $controller->showGuess();
 }
 
 if (isset($_POST['answer'])) {
-  $answer = $_POST['answer'];
-
-  if (!($answer >= 10 and $answer <= 99)) {
-    $_SESSION['error'] = 'Неверно указано значение';
-    header('Location: /?guess');
-    exit;
-  }
-
-  $extr->setRating($answer);
-  $number->addValue($answer);
-  header('Location: /?result');
-  exit;
+  $controller->setResult($_POST['answer']);
 }
 
 if (isset($_GET['result'])) {
-  $view->renderHtml('result.php');
+  $controller->showResult();
 }
